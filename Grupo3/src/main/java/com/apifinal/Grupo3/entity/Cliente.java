@@ -2,22 +2,60 @@ package com.apifinal.Grupo3.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "clienteId",
+		scope = Cliente.class
+		)
+@Entity
+@Table(name = "cliente")
 public class Cliente {
 
-	private Integer idCliente;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "clienteid")
+	private Integer clienteId;
+	
+	@Column(name = "nome")
 	private String nome;
+	
+	@Column(name = "nomecompleto")
 	private String nomeCompleto;
+	
+	@Column(name = "cpf", unique = true)
 	private String cpf;
+	
+	@Column(name = "telefone")
 	private String telefone;
+	
+	@Column(name = "datanascimento")
 	private Date dataNascimento;
+	
+	@Column(name = "email", unique = true)
+	private String email;
+	
+	@OneToOne
+	@JoinColumn(name = "enderecoid", referencedColumnName = "enderecoid")
 	private Endereco endereco;
 
-	public Integer getIdCliente() {
-		return idCliente;
+	public Integer getClienteId() {
+		return clienteId;
 	}
 
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
+	public void setClienteId(Integer clienteId) {
+		this.clienteId = clienteId;
 	}
 
 	public String getNome() {
@@ -68,16 +106,12 @@ public class Cliente {
 		this.endereco = endereco;
 	}
 
-	public Cliente(Integer idCliente, String nome, String nomeCompleto, String cpf, String telefone,
-			Date dataNascimento, Endereco endereco) {
-		super();
-		this.idCliente = idCliente;
-		this.nome = nome;
-		this.nomeCompleto = nomeCompleto;
-		this.cpf = cpf;
-		this.telefone = telefone;
-		this.dataNascimento = dataNascimento;
-		this.endereco = endereco;
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
