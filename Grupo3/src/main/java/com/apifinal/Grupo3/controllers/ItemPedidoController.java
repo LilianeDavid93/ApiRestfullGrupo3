@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.apifinal.Grupo3.entities.ItemPedido;
+import com.apifinal.Grupo3.services.ItemPedidoService;
 
 @RestController
 @RequestMapping("/itemPedidos")
@@ -34,21 +36,6 @@ public class ItemPedidoController {
 			} else {
 				return new ResponseEntity<>(itemPedido, HttpStatus.OK);
 			}
-		}
-
-		@GetMapping("/resumido/{id}")
-		public ResponseEntity<ItemPedidoResumidoDTO> getItemPedidoResumido(@PathVariable Integer id) {
-			ItemPedidoResumidoDTO itemPedidoResDTO = itemPedidoService.getItemPedidoResumido(id);
-			if (itemPedidoResDTO == null) {
-				return new ResponseEntity<>(itemPedidoResDTO, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(itemPedidoResDTO, HttpStatus.OK);
-			}
-		}
-
-		@GetMapping("/resumido")
-		public ResponseEntity<List<ItemPedidoResumidoDTO>> listarItemPedidosResumidos() {
-			return new ResponseEntity<>(itemPedidoService.listarItemPedidosResumidos(), HttpStatus.OK);
 		}
 
 		@PostMapping

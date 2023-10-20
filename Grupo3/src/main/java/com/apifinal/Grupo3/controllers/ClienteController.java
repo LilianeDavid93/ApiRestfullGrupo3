@@ -14,61 +14,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.entities.Cliente;
+import com.apifinal.Grupo3.services.ClienteService;
+
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
 
 	@Autowired
 	ClienteService clienteService;
-
-	public class ClienteController {
-
-		@GetMapping
-		public ResponseEntity<List<Cliente>> listarClientes() {
-			return new ResponseEntity<>(clienteService.listarClientes(), HttpStatus.OK);
+	
+	@GetMapping
+	public ResponseEntity<List<Cliente>> listar(){
+		return new ResponseEntity<>(clienteService.listarClientes(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id) {
+		Cliente cliente = clienteService.buscarClienteId(id);
+		
+		if(cliente == null) {
+			return new ResponseEntity<>(cliente, HttpStatus.NOT_FOUND);
+		}else
+			return new ResponseEntity<>(cliente, HttpStatus.OK);
+	}
+	
+	@PostMapping
+	public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente) {
+		return new ResponseEntity<>(clienteService.salvarCliente(cliente), HttpStatus.CREATED);
+	}
+	
+	@PutMapping
+	public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente) {
+		return new ResponseEntity<>(clienteService.atualizarCliente(cliente), HttpStatus.OK);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<String> deletar(@RequestBody Cliente cliente) {
+		if(clienteService.deletarCliente(cliente) == true) {
+			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
 		}
-
-		@GetMapping("/{id}")
-		public ResponseEntity<Cliente> buscarClienteId(@PathVariable Integer id) {
-			Cliente cliente = clienteService.buscarClienteId(id);
-			if (cliente == null) {
-				return new ResponseEntity<>(cliente, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(cliente, HttpStatus.OK);
-			}
-		}
-
-		@GetMapping("/resumido/{id}")
-		public ResponseEntity<ClienteResumidoDTO> getClienteResumido(@PathVariable Integer id) {
-			ClienteResumidoDTO clienteResDTO = clienteService.getClienteResumido(id);
-			if (clienteResDTO == null) {
-				return new ResponseEntity<>(clienteResDTO, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(clienteResDTO, HttpStatus.OK);
-			}
-		}
-
-		@GetMapping("/resumido")
-		public ResponseEntity<List<ClienteResumidoDTO>> listarClientesResumidos() {
-			return new ResponseEntity<>(clienteService.listarClientesResumidos(), HttpStatus.OK);
-		}
-
-		@PostMapping
-		public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente) {
-			return new ResponseEntity<>(clienteService.salvarCliente(cliente), HttpStatus.CREATED);
-		}
-
-		@PutMapping
-		public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente) {
-			return new ResponseEntity<>(clienteService.atualizarCliente(cliente), HttpStatus.OK);
-		}
-
-		@DeleteMapping
-		public ResponseEntity<String> deletarCliente(@RequestBody Cliente cliente) {
-			if (clienteService.deletarCliente(cliente))
-				return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
-			else
-				return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
-		}
+		else return new ResponseEntity<>("Não foi possível deletar", HttpStatus.BAD_REQUEST);
 	}
 }

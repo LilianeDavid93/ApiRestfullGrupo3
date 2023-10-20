@@ -13,15 +13,14 @@ public class ClienteService {
 	@Autowired
 	ClienteRepository clienteRep;
 	
-	
-	private Cliente buscarClienteId(Integer clienteId) {
-		return null;
-	}
-
 	public List<Cliente> listarClientes() {
 		return clienteRep.findAll();
 	}
-				
+	
+	public Cliente buscarClienteId(Integer clienteId) {
+		return clienteRep.findById(clienteId).orElse(null);
+	}
+
 	public Cliente salvarCliente(Cliente cliente) {
 		return clienteRep.save(cliente);
 	}
@@ -31,19 +30,21 @@ public class ClienteService {
 	}
 
 	public Boolean deletarCliente(Cliente cliente) {
-		if (cliente == null)
-			return false;
+		if (cliente == null) {
+			return false;	
+		}
 
 		Cliente clienteExistente = buscarClienteId(cliente.getClienteId());
-		if (clienteExistente == null)
+		if (clienteExistente == null) {
 			return false;
+		}
 
 		clienteRep.delete(cliente);
 
 		Cliente clienteContinuaExistindo = buscarClienteId(cliente.getClienteId());
-		if (clienteContinuaExistindo == null)
-			return true;
-
+		if (clienteContinuaExistindo == null) {
+			return true;			
+		}
 		return false;
 	}
 
