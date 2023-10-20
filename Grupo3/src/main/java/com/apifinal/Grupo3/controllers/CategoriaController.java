@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.entities.Cliente;
+import com.apifinal.Grupo3.services.ClienteService;
+
 @RestController
 @RequestMapping("/clientes")
 public class CategoriaController {
@@ -39,7 +42,7 @@ public class CategoriaController {
 		}
 
 		@GetMapping("/resumido/{id}")
-		public ResponseEntity<ClienteResumidoDTO> getClienteResumido(@PathVariable Integer id) {
+		public ResponseEntity<ClienteDTO> getClienteResumido(@PathVariable Integer id) {
 			ClienteResumidoDTO clienteResDTO = clienteService.getClienteResumido(id);
 			if (clienteResDTO == null) {
 				return new ResponseEntity<>(clienteResDTO, HttpStatus.NOT_FOUND);

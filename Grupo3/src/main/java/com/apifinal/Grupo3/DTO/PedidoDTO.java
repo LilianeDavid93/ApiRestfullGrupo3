@@ -1,19 +1,14 @@
 package com.apifinal.Grupo3.DTO;
 
 import java.util.Date;
+import java.util.List;
 
-public class ClienteDto {
+public class PedidoDTO {
 
 	private Integer pedidoId;
 	private Date dataPedido;
 	private Double valorTotal;
-
-	public ClienteDto(Integer pedidoId, Date dataPedido, Double valorTotal) {
-		super();
-		this.pedidoId = pedidoId;
-		this.dataPedido = dataPedido;
-		this.valorTotal = valorTotal;
-	}
+	private List<ItemPedidoDTO> itens;
 
 	public Integer getPedidoId() {
 		return pedidoId;
@@ -37,6 +32,24 @@ public class ClienteDto {
 
 	public void setValorTotal(Double valorTotal) {
 		this.valorTotal = valorTotal;
+	}
+
+	public List<ItemPedidoDTO> getItens() {
+		return itens;
+	}
+
+	public void setItens(List<ItemPedidoDTO> itens) {
+		this.itens = itens;
+	}
+
+	public PedidoDTO(Integer pedidoId, Date dataPedido, Double valorTotal, List<ItemPedidoDTO> itens) {
+		this.pedidoId = pedidoId;
+		this.dataPedido = dataPedido;
+		this.valorTotal = valorTotal;
+		this.itens = itens;
+	}
+
+	public PedidoDTO() {
 	}
 
 }

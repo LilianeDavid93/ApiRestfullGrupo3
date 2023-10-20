@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.entities.Pedido;
+import com.apifinal.Grupo3.services.PedidoService;
+
 @RestController
 @RequestMapping("/pedidos")
 public class PedidoController {
@@ -69,4 +72,4 @@ public class PedidoController {
 				return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
 		}
 	}
-}
+
