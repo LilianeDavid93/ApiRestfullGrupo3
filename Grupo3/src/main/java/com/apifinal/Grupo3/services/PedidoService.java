@@ -89,14 +89,14 @@ public class PedidoService {
 		if (pedido == null) {
 			return false;
 		}
-		Pedido pedidoExistente = buscarPedidoPorId(pedido.getNumeroMatriculaPedido());
+		Pedido pedidoExistente = buscarPedidoPorId(pedido.getPedidoId());
 
 		if (pedidoExistente == null) {
 			return false;
 		}
 		pedidoRepo.delete(pedido);
 
-		Pedido pedidoContinuaExistindo = buscarPedidoPorId(pedido.getNumeroMatriculaPedido());
+		Pedido pedidoContinuaExistindo = buscarPedidoPorId(pedido.getPedidoId());
 
 		if (pedidoContinuaExistindo == null) {
 			return true;
