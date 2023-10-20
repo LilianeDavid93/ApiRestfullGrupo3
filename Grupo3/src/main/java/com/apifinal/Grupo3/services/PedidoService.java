@@ -20,15 +20,16 @@ public class PedidoService {
 		return pedidoRepo.findAll();
 	}
 
-	public List<PedidoDTO> getPedidosResumidos() {
+	public List<PedidoDTO> Pedidos() {
 		List<Pedido> pedidos = pedidoRepo.findAll();
 		List<PedidoDTO> pedidosDTO = new ArrayList<>();
 
 		for (Pedido pedido : pedidos) {
 			PedidoDTO pedidoResDTO = new PedidoDTO();
-			pedidoResDTO.setNumeroMatriculaPedido(pedido.getNumeroMatriculaPedido());
-			pedidoResDTO.setNome(pedido.getNome());
-			pedidoResDTO.setCpf(pedido.getCpf());
+			pedidoResDTO.setPedidoId(pedido.getPedidoId());
+			pedidoResDTO.setDataPedido(pedido.getDataPedido());
+			pedidoResDTO.setValorTotal(pedido.getValorTotal());
+			pedidoResDTO.setItens(pedido.getItensPedidos());
 			pedidosDTO.add(pedidoResDTO);
 		}
 
@@ -40,13 +41,12 @@ public class PedidoService {
 		return pedidoRepo.findById(id).orElse(null);
 	}
 
-	public PedidoDTO getPedidoResumidoPorId(Integer id) {
+	public PedidoDTO PedidoRelatorioPorId(Integer id) {
 		Pedido pedido = pedidoRepo.findById(id).orElse(null);
 
 		if (pedido != null) {
-			PedidoDTO pedidoResDTO = new PedidoDTO(pedido.getNumeroMatriculaPedido(), pedido.getNome(),
-					pedido.getCpf());
-			return pedidoResDTO;
+			PedidoDTO pedidoDTO = new PedidoDTO(pedido.getPedidoId(),pedido.getDataPedido(), pedido.getValorTotal());
+			return pedidoDTO;
 
 		}
 
@@ -80,5 +80,4 @@ public class PedidoService {
 		return false;
 
 	}
-
 }

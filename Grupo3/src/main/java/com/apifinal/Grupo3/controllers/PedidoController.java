@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.DTO.PedidoDTO;
 import com.apifinal.Grupo3.entities.Pedido;
 import com.apifinal.Grupo3.services.PedidoService;
 
@@ -30,8 +31,8 @@ public class PedidoController {
 		}
 
 		@GetMapping("/{id}")
-		public ResponseEntity<Pedido> buscarPedidoId(@PathVariable Integer id) {
-			Pedido pedido = pedidoService.buscarPedidoId(id);
+		public ResponseEntity<PedidoDTO> buscarPedidoId(@PathVariable Integer id) {
+			Pedido pedido = pedidoService.buscarPedidoPorId(id);
 			if (pedido == null) {
 				return new ResponseEntity<>(pedido, HttpStatus.NOT_FOUND);
 			} else {
@@ -39,19 +40,19 @@ public class PedidoController {
 			}
 		}
 
-		@GetMapping("/resumido/{id}")
-		public ResponseEntity<PedidoResumidoDTO> getPedidoResumido(@PathVariable Integer id) {
-			PedidoResumidoDTO pedidoResDTO = pedidoService.getPedidoResumido(id);
-			if (pedidoResDTO == null) {
+		@GetMapping("/relatorio/{id}")
+		public ResponseEntity<PedidoDTO> RelatorioPedido(@PathVariable Integer id) {
+			PedidoDTO pedidoDTO = pedidoService..getPedidoResumido(id);
+			if (pedidoDTO == null) {
 				return new ResponseEntity<>(pedidoResDTO, HttpStatus.NOT_FOUND);
 			} else {
 				return new ResponseEntity<>(pedidoResDTO, HttpStatus.OK);
 			}
 		}
 
-		@GetMapping("/resumido")
-		public ResponseEntity<List<PedidoResumidoDTO>> listarPedidosResumidos() {
-			return new ResponseEntity<>(pedidoService.listarPedidosResumidos(), HttpStatus.OK);
+		@GetMapping("/relatorio")
+		public ResponseEntity<List<PedidoDTO>> listarPedidosRelatorios() {
+			return new ResponseEntity<>(pedidoService..listarPedidosResumidos(), HttpStatus.OK);
 		}
 
 		@PostMapping
