@@ -1,5 +1,7 @@
 package com.apifinal.Grupo3.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -8,8 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @JsonIdentityInfo(
@@ -32,13 +33,16 @@ public class Categoria {
 	@Column(name = "descricao", unique = true)
 	private String descricao;
 	
-	/* REVISAR
-	 
-	  @ManyToOne
-	@JoinColumn(name = "categoriaid", referencedColumnName = "categoriaid")
-	private Categoria categoria;
-	
-	*/
+	@OneToMany(mappedBy = "categoria")
+	private List<Produto> produto;
+
+	public List<Produto> getProduto() {
+		return produto;
+	}
+
+	public void setProduto(List<Produto> produto) {
+		this.produto = produto;
+	}
 
 	public Integer getCategoriaId() {
 		return categoriaId;

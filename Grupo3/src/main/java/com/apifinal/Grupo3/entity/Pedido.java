@@ -1,7 +1,6 @@
 package com.apifinal.Grupo3.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -46,7 +45,11 @@ public class Pedido {
 	
 	@ManyToOne
 	@JoinColumn (name = "pedidoid", referencedColumnName = "pedidoid")
-	private List<Cliente> clientes;
+	private Cliente cliente;
+	
+	@ManyToOne
+	@JoinColumn (name = "itempedidoid", referencedColumnName = "itempedidoid")
+	private ItemPedido itemPedido;
 
 	public Integer getPedidoId() {
 		return pedidoId;
@@ -96,12 +99,22 @@ public class Pedido {
 		this.valorTotal = valorTotal;
 	}
 
-	public List<Cliente> getClientes() {
-		return clientes;
+	public Cliente getCliente() {
+		return cliente;
 	}
 
-	public void setClientes(List<Cliente> clientes) {
-		this.clientes = clientes;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
 	}
+
+	public ItemPedido getItemPedido() {
+		return itemPedido;
+	}
+
+	public void setItemPedido(ItemPedido itemPedido) {
+		this.itemPedido = itemPedido;
+	}
+
+
 	
 }

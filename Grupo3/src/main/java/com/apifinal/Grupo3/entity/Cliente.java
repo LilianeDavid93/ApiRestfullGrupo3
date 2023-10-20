@@ -1,6 +1,7 @@
 package com.apifinal.Grupo3.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -11,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -46,9 +48,21 @@ public class Cliente {
 	@Column(name = "email", unique = true)
 	private String email;
 	
+	//Cliente - Endereco
 	@OneToOne
 	@JoinColumn(name = "enderecoid", referencedColumnName = "enderecoid")
 	private Endereco endereco;
+	
+	@OneToMany(mappedBy = "cliente")
+	private List<Pedido> pedido;
+
+	public List<Pedido> getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(List<Pedido> pedido) {
+		this.pedido = pedido;
+	}
 
 	public Integer getClienteId() {
 		return clienteId;

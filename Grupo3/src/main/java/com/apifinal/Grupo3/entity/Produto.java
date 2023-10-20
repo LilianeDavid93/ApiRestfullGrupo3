@@ -10,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @JsonIdentityInfo(
@@ -46,14 +48,30 @@ public class Produto {
 	@Column(name = "imagem")
 	private byte[] imagem;
 
-	/* REVISAR
-	 
-	  @ManyToMany
-	@JoinColumn(name = "produtoid", referencedColumnName = "produtoid")
+	@ManyToOne
+	@JoinColumn (name = "itempedidoid", referencedColumnName = "itempedidoid")
+	private ItemPedido itempedido;
+	
+	@ManyToOne
+	@JoinColumn (name = "categoriaid", referencedColumnName = "categoriaid")
 	private Categoria categoria;
 	
-	*/
-	
+	public ItemPedido getItempedido() {
+		return itempedido;
+	}
+
+	public void setItempedido(ItemPedido itempedido) {
+		this.itempedido = itempedido;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
 	public Integer getProdutoId() {
 		return produtoId;
 	}
