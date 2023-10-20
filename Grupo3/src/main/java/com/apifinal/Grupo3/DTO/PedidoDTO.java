@@ -9,7 +9,7 @@ public class PedidoDTO {
 	private Date dataPedido;
 	private Double valorTotal;
 	private List<ItemPedidoDTO> itensPedido;
-	 
+
 	public Integer getPedidoId() {
 		return pedidoId;
 	}
@@ -52,7 +52,4 @@ public class PedidoDTO {
 	public PedidoDTO() {
 	}
 
-
-
-	
 }

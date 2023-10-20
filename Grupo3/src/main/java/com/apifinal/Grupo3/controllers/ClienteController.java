@@ -25,12 +25,12 @@ public class ClienteController {
 	ClienteService clienteService;
 	
 	@GetMapping
-	public ResponseEntity<List<Cliente>> listar(){
+	public ResponseEntity<List<Cliente>> listarCliente(){
 		return new ResponseEntity<>(clienteService.listarClientes(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Cliente> buscarPorId(@PathVariable Integer id) {
+	public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Integer id) {
 		Cliente cliente = clienteService.buscarClienteId(id);
 		
 		if(cliente == null) {

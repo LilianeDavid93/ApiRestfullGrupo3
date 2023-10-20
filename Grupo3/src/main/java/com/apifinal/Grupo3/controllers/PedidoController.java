@@ -40,27 +40,6 @@ public class PedidoController {
 		}
 	}
 
-	@GetMapping("/relatorio/{id}")
-		public ResponseEntity<PedidoDTO> RelatorioPedido(@PathVariable Integer id) {
-			PedidoDTO pedidoDTO = pedidoService.PedidoRelatorioPorId(id);
-			if (pedidoDTO == null) {
-				return new ResponseEntity<>(pedidoDTO, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(pedidoDTO, HttpStatus.OK);
-			}
-		}
-
-	@GetMapping("/relatorio")
-	public ResponseEntity<List<PedidoDTO>> gerarRelatorioDePedidos() {
-		List<PedidoDTO> relatorio = pedidoService.listarPedidosComItens();
-
-		if (relatorio.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-
-		return ResponseEntity.ok(relatorio);
-	}
-
 	@PostMapping
 	public ResponseEntity<Pedido> salvarPedido(@RequestBody Pedido pedido) {
 		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
@@ -73,9 +52,30 @@ public class PedidoController {
 
 	@DeleteMapping
 	public ResponseEntity<String> deletarPedido(@RequestBody Pedido pedido) {
-		if (pedidoService.deletarPedido(pedido))
+		if (pedidoService.deletarPedido(pedido) == true)
 			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
 		else
 			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/relatorio")
+	public ResponseEntity<List<PedidoDTO>> gerarRelatorioDePedidos() {
+		List<PedidoDTO> relatorio = pedidoService.listarPedidosComItens();
+
+		if (relatorio.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(relatorio);
+	}
+
+	@GetMapping("/relatorio/{id}")
+	public ResponseEntity<PedidoDTO> RelatorioPedido(@PathVariable Integer id) {
+		PedidoDTO pedidoDTO = pedidoService.PedidoRelatorioPorId(id);
+		if (pedidoDTO == null) {
+			return new ResponseEntity<>(pedidoDTO, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(pedidoDTO, HttpStatus.OK);
+		}
 	}
 }
