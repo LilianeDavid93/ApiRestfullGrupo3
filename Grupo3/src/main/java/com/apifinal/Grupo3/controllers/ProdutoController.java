@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.entities.Produto;
+import com.apifinal.Grupo3.services.ProdutoService;
+
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
@@ -21,52 +24,36 @@ public class ProdutoController {
 	@Autowired
 	ProdutoService produtoService;
 
-		@GetMapping
-		public ResponseEntity<List<Produto>> listarProdutos() {
-			return new ResponseEntity<>(produtoService.listarProdutos(), HttpStatus.OK);
-		}
+	@GetMapping
+	public ResponseEntity<List<Produto>> listarProduto() {
+		return new ResponseEntity<>(produtoService.listarProduto(), HttpStatus.OK);
+	}
 
-		@GetMapping("/{id}")
-		public ResponseEntity<Produto> buscarProdutoId(@PathVariable Integer id) {
-			Produto produto = produtoService.buscarProdutoId(id);
-			if (produto == null) {
-				return new ResponseEntity<>(produto, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(produto, HttpStatus.OK);
-			}
+	@GetMapping("/{id}")
+	public ResponseEntity<Produto> buscarProdutoId(@PathVariable Integer id) {
+		Produto produto = produtoService.buscarProdutoId(id);
+		if (produto == null) {
+			return new ResponseEntity<>(produto, HttpStatus.NOT_FOUND);
+		} else {
+			return new ResponseEntity<>(produto, HttpStatus.OK);
 		}
+	}
 
-		@GetMapping("/resumido/{id}")
-		public ResponseEntity<ProdutoResumidoDTO> getProdutoResumido(@PathVariable Integer id) {
-			ProdutoResumidoDTO produtoResDTO = produtoService.getProdutoResumido(id);
-			if (produtoResDTO == null) {
-				return new ResponseEntity<>(produtoResDTO, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(produtoResDTO, HttpStatus.OK);
-			}
-		}
+	@PostMapping
+	public ResponseEntity<Produto> salvar(@RequestBody Produto produto) {
+		return new ResponseEntity<>(produtoService.salvarProduto(produto), HttpStatus.CREATED);
+	}
 
-		@GetMapping("/resumido")
-		public ResponseEntity<List<ProdutoResumidoDTO>> listarProdutosResumidos() {
-			return new ResponseEntity<>(produtoService.listarProdutosResumidos(), HttpStatus.OK);
-		}
+	@PutMapping
+	public ResponseEntity<Produto> atualizar(@RequestBody Produto produto) {
+		return new ResponseEntity<>(produtoService.atualizarProduto(produto), HttpStatus.OK);
+	}
 
-		@PostMapping
-		public ResponseEntity<Produto> salvar(@RequestBody Produto produto) {
-			return new ResponseEntity<>(produtoService.salvarProduto(produto), HttpStatus.CREATED);
-		}
-
-		@PutMapping
-		public ResponseEntity<Produto> atualizar(@RequestBody Produto produto) {
-			return new ResponseEntity<>(produtoService.atualizarProduto(produto), HttpStatus.OK);
-		}
-
-		@DeleteMapping
-		public ResponseEntity<String> deletarProduto(@RequestBody Produto produto) {
-			if (produtoService.deletarProduto(produto))
-				return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
-			else
-				return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
-		}
+	@DeleteMapping
+	public ResponseEntity<String> deletarProduto(@RequestBody Produto produto) {
+		if (produtoService.deletarProduto(produto))
+			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
+		else
+			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
 	}
 }

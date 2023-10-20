@@ -14,64 +14,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apifinal.Grupo3.entities.Cliente;
-import com.apifinal.Grupo3.services.ClienteService;
+import com.apifinal.Grupo3.entities.Categoria;
+import com.apifinal.Grupo3.services.CategoriaService;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/categorias")
 public class CategoriaController {
 
 	@Autowired
-	ClienteService clienteService;
+	CategoriaService categoriaService;
 
-	public class ClienteController {
+	@GetMapping
+	public ResponseEntity<List<Categoria>> listarCategorias() {
+		return new ResponseEntity<>(categoriaService.listarCategorias(), HttpStatus.OK);
+	}
 
-		@GetMapping
-		public ResponseEntity<List<Cliente>> listarClientes() {
-			return new ResponseEntity<>(clienteService.listarClientes(), HttpStatus.OK);
-		}
-
-		@GetMapping("/{id}")
-		public ResponseEntity<Cliente> buscarClienteId(@PathVariable Integer id) {
-			Cliente cliente = clienteService.buscarClienteId(id);
-			if (cliente == null) {
-				return new ResponseEntity<>(cliente, HttpStatus.NOT_FOUND);
+	@GetMapping("/{id}")
+		public ResponseEntity<Categoria> buscarCategoriaId(@PathVariable Integer id) {
+			Categoria categoria = categoriaService.buscarCategoriaId(id);
+			if (categoria == null) {
+				return new ResponseEntity<>(categoria, HttpStatus.NOT_FOUND);
 			} else {
-				return new ResponseEntity<>(cliente, HttpStatus.OK);
+				return new ResponseEntity<>(categoria, HttpStatus.OK);
 			}
 		}
 
-		@GetMapping("/resumido/{id}")
-		public ResponseEntity<ClienteDTO> getClienteResumido(@PathVariable Integer id) {
-			ClienteResumidoDTO clienteResDTO = clienteService.getClienteResumido(id);
-			if (clienteResDTO == null) {
-				return new ResponseEntity<>(clienteResDTO, HttpStatus.NOT_FOUND);
-			} else {
-				return new ResponseEntity<>(clienteResDTO, HttpStatus.OK);
-			}
-		}
+	@PostMapping
+	public ResponseEntity<Categoria> salvar(@RequestBody Categoria categoria) {
+		return new ResponseEntity<>(categoriaService.salvarCategoria(categoria), HttpStatus.CREATED);
+	}
 
-		@GetMapping("/resumido")
-		public ResponseEntity<List<ClienteResumidoDTO>> listarClientesResumidos() {
-			return new ResponseEntity<>(clienteService.listarClientesResumidos(), HttpStatus.OK);
-		}
+	@PutMapping
+	public ResponseEntity<Categoria> atualizar(@RequestBody Categoria categoria) {
+		return new ResponseEntity<>(categoriaService.atualizarCategoria(categoria), HttpStatus.OK);
+	}
 
-		@PostMapping
-		public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente) {
-			return new ResponseEntity<>(clienteService.salvarCliente(cliente), HttpStatus.CREATED);
-		}
-
-		@PutMapping
-		public ResponseEntity<Cliente> atualizar(@RequestBody Cliente cliente) {
-			return new ResponseEntity<>(clienteService.atualizarCliente(cliente), HttpStatus.OK);
-		}
-
-		@DeleteMapping
-		public ResponseEntity<String> deletarCliente(@RequestBody Cliente cliente) {
-			if (clienteService.deletarCliente(cliente))
-				return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
-			else
-				return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
-		}
+	@DeleteMapping
+	public ResponseEntity<String> deletarCategoria(@RequestBody Categoria categoria) {
+		if (categoriaService.deletarCategoria(categoria))
+			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
+		else
+			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
 	}
 }

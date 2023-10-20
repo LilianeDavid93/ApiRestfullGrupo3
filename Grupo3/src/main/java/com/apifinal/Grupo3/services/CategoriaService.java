@@ -11,16 +11,15 @@ public class CategoriaService {
 
 	@Autowired
 	CategoriaRepository categoriaRep;
-	
-	
-	private Categoria buscarCategoriaId(Integer categoriaId) {
-		return null;
+
+	public Categoria buscarCategoriaId(Integer categoriaId) {
+		return categoriaRep.findById(categoriaId).orElse(null);
 	}
 
 	public List<Categoria> listarCategorias() {
 		return categoriaRep.findAll();
 	}
-				
+
 	public Categoria salvarCategoria(Categoria categoria) {
 		return categoriaRep.save(categoria);
 	}
