@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.apifinal.Grupo3.entity.User;
-import com.apifinal.Grupo3.repository.UserRepository;
+import com.apifinal.Grupo3.entities.User;
+import com.apifinal.Grupo3.repositories.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

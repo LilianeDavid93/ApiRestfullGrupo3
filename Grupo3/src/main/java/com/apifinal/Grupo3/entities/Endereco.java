@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -8,11 +8,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
-					property = "enderecoId",
-					scope = Endereco.class)
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "enderecoId",
+		scope = Endereco.class
+		)
 @Entity
 @Table(name = "endereco")
 public class Endereco {
@@ -42,6 +45,17 @@ public class Endereco {
 
 	@Column(name = "numero")
 	private Integer numero;
+	
+	@OneToOne(mappedBy = "endereco")
+	private Cliente cliente;
+	
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	public Integer getEnderecoId() {
 		return enderecoId;

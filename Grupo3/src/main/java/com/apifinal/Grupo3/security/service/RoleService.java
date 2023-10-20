@@ -3,8 +3,8 @@ package com.apifinal.Grupo3.security.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.apifinal.Grupo3.entity.Role;
-import com.apifinal.Grupo3.repository.RoleRepository;
+import com.apifinal.Grupo3.entities.Role;
+import com.apifinal.Grupo3.repositories.RoleRepository;
 
 @Service
 public class RoleService {

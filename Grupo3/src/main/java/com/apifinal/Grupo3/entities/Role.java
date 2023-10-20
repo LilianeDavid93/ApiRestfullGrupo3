@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

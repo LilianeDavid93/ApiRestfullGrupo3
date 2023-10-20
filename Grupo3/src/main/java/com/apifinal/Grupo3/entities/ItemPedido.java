@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import java.util.List;
 
@@ -43,10 +43,10 @@ public class ItemPedido {
 	private Double valorLiquido;
 	
 	@OneToMany(mappedBy = "itempedido")
-	private List<Pedido> pedido;
+	private List <Pedido> pedidos;
 	
 	@OneToMany(mappedBy = "itempedido")
-	private List<Produto> produto;
+	private List <Produto> produtos;
 
 	public Integer getItemPedidoId() {
 		return itemPedidoId;
@@ -96,21 +96,20 @@ public class ItemPedido {
 		this.valorLiquido = valorLiquido;
 	}
 
-	public List<Pedido> getPedido() {
-		return pedido;
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
-	public void setPedido(List<Pedido> pedido) {
-		this.pedido = pedido;
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
-	public List<Produto> getProduto() {
-		return produto;
+	public List<Produto> getProdutos() {
+		return produtos;
 	}
 
-	public void setProduto(List<Produto> produto) {
-		this.produto = produto;
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
-	
-	
+
 }

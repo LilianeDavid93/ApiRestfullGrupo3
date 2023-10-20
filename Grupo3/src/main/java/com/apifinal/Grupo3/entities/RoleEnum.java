@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 public enum RoleEnum {
 	ROLE_USER,

@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import java.util.Date;
 
@@ -50,18 +50,18 @@ public class Produto {
 
 	@ManyToOne
 	@JoinColumn (name = "itempedidoid", referencedColumnName = "itempedidoid")
-	private ItemPedido itempedido;
+	private ItemPedido itemPedido;
 	
 	@ManyToOne
 	@JoinColumn (name = "categoriaid", referencedColumnName = "categoriaid")
 	private Categoria categoria;
-	
-	public ItemPedido getItempedido() {
-		return itempedido;
+
+	public ItemPedido getItemPedido() {
+		return itemPedido;
 	}
 
-	public void setItempedido(ItemPedido itempedido) {
-		this.itempedido = itempedido;
+	public void setItemPedido(ItemPedido itemPedido) {
+		this.itemPedido = itemPedido;
 	}
 
 	public Categoria getCategoria() {

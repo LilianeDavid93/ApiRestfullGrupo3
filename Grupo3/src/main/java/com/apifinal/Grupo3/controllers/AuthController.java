@@ -22,11 +22,11 @@ import com.apifinal.Grupo3.DTO.JwtResponseDTO;
 import com.apifinal.Grupo3.DTO.LoginRequestDTO;
 import com.apifinal.Grupo3.DTO.MessageResponseDTO;
 import com.apifinal.Grupo3.DTO.SignupRequestDTO;
-import com.apifinal.Grupo3.entity.Role;
-import com.apifinal.Grupo3.entity.RoleEnum;
-import com.apifinal.Grupo3.entity.User;
-import com.apifinal.Grupo3.repository.RoleRepository;
-import com.apifinal.Grupo3.repository.UserRepository;
+import com.apifinal.Grupo3.entities.Role;
+import com.apifinal.Grupo3.entities.RoleEnum;
+import com.apifinal.Grupo3.entities.User;
+import com.apifinal.Grupo3.repositories.RoleRepository;
+import com.apifinal.Grupo3.repositories.UserRepository;
 import com.apifinal.Grupo3.security.jwt.JwtUtils;
 import com.apifinal.Grupo3.security.service.UserDetailsImpl;
 

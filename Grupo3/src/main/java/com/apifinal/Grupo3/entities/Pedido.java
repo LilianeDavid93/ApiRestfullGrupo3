@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import java.util.Date;
 
@@ -44,7 +44,7 @@ public class Pedido {
 	private Double valorTotal;
 	
 	@ManyToOne
-	@JoinColumn (name = "pedidoid", referencedColumnName = "pedidoid")
+	@JoinColumn (name = "clienteid", referencedColumnName = "clienteid")
 	private Cliente cliente;
 	
 	@ManyToOne

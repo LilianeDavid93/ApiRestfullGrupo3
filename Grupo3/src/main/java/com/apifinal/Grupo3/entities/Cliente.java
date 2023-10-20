@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import java.util.Date;
 import java.util.List;
@@ -48,20 +48,19 @@ public class Cliente {
 	@Column(name = "email", unique = true)
 	private String email;
 	
-	//Cliente - Endereco
 	@OneToOne
 	@JoinColumn(name = "enderecoid", referencedColumnName = "enderecoid")
 	private Endereco endereco;
 	
 	@OneToMany(mappedBy = "cliente")
-	private List<Pedido> pedido;
+	private List <Pedido> pedidos;
 
-	public List<Pedido> getPedido() {
-		return pedido;
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
-	public void setPedido(List<Pedido> pedido) {
-		this.pedido = pedido;
+	public void setPedidos(List<Pedido> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 	public Integer getClienteId() {

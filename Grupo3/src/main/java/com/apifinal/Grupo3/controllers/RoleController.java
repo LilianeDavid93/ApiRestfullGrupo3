@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apifinal.Grupo3.entity.Role;
+import com.apifinal.Grupo3.entities.Role;
 import com.apifinal.Grupo3.security.service.RoleService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)

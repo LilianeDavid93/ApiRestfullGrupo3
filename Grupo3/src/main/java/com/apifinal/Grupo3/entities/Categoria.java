@@ -1,4 +1,4 @@
-package com.apifinal.Grupo3.entity;
+package com.apifinal.Grupo3.entities;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "categoriaId",
-		scope = Produto.class
+		scope = Categoria.class
 		)
 @Entity
 @Table(name = "categoria")
@@ -34,14 +34,14 @@ public class Categoria {
 	private String descricao;
 	
 	@OneToMany(mappedBy = "categoria")
-	private List<Produto> produto;
+	private List <Produto> produtos;
 
-	public List<Produto> getProduto() {
-		return produto;
+	public List<Produto> getProdutos() {
+		return produtos;
 	}
 
-	public void setProduto(List<Produto> produto) {
-		this.produto = produto;
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 
 	public Integer getCategoriaId() {
@@ -67,6 +67,5 @@ public class Categoria {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
 	
 }
