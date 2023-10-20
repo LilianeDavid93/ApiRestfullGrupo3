@@ -8,8 +8,8 @@ public class PedidoDTO {
 	private Integer pedidoId;
 	private Date dataPedido;
 	private Double valorTotal;
-	private List<ItemPedidoDTO> itens;
-
+	private List<ItemPedidoDTO> itensPedido;
+	 
 	public Integer getPedidoId() {
 		return pedidoId;
 	}
@@ -34,22 +34,25 @@ public class PedidoDTO {
 		this.valorTotal = valorTotal;
 	}
 
-	public List<ItemPedidoDTO> getItens() {
-		return itens;
+	public List<ItemPedidoDTO> getItensPedido() {
+		return itensPedido;
 	}
 
-	public void setItens(List<ItemPedidoDTO> itens) {
-		this.itens = itens;
+	public void setItensPedido(List<ItemPedidoDTO> itensPedido) {
+		this.itensPedido = itensPedido;
 	}
 
-	public PedidoDTO(Integer pedidoId, Date dataPedido, Double valorTotal, List<ItemPedidoDTO> itens) {
+	public PedidoDTO(Integer pedidoId, Date dataPedido, Double valorTotal, List<ItemPedidoDTO> itensPedido) {
 		this.pedidoId = pedidoId;
 		this.dataPedido = dataPedido;
 		this.valorTotal = valorTotal;
-		this.itens = itens;
+		this.itensPedido = itensPedido;
 	}
 
 	public PedidoDTO() {
 	}
 
+
+
+	
 }
