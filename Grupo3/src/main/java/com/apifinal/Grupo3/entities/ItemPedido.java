@@ -1,16 +1,14 @@
 package com.apifinal.Grupo3.entities;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @JsonIdentityInfo(
@@ -42,11 +40,29 @@ public class ItemPedido {
 	@Column(name = "valorliquido")
 	private Double valorLiquido;
 	
-	@OneToMany(mappedBy = "itempedido")
-	private List <Pedido> pedidos;
+	@ManyToOne
+	@JoinColumn (name = "pedidoid", referencedColumnName = "pedidoid")
+	private Pedido pedido;
 	
-	@OneToMany(mappedBy = "itempedido")
-	private List <Produto> produtos;
+	@ManyToOne
+	@JoinColumn (name = "produtoid", referencedColumnName = "produtoid")
+	private Produto produto;
+
+	public Pedido getPedido() {
+		return pedido;
+	}
+
+	public void setPedido(Pedido pedido) {
+		this.pedido = pedido;
+	}
+
+	public Produto getProduto() {
+		return produto;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
 
 	public Integer getItemPedidoId() {
 		return itemPedidoId;
@@ -94,22 +110,6 @@ public class ItemPedido {
 
 	public void setValorLiquido(Double valorLiquido) {
 		this.valorLiquido = valorLiquido;
-	}
-
-	public List<Pedido> getPedidos() {
-		return pedidos;
-	}
-
-	public void setPedidos(List<Pedido> pedidos) {
-		this.pedidos = pedidos;
-	}
-
-	public List<Produto> getProdutos() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
 	}
 
 }

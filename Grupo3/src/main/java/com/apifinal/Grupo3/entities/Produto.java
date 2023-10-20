@@ -1,6 +1,7 @@
 package com.apifinal.Grupo3.entities;
 
 import java.util.Date;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -13,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @JsonIdentityInfo(
@@ -48,20 +50,19 @@ public class Produto {
 	@Column(name = "imagem")
 	private byte[] imagem;
 
-	@ManyToOne
-	@JoinColumn (name = "itempedidoid", referencedColumnName = "itempedidoid")
-	private ItemPedido itemPedido;
+	@OneToMany(mappedBy = "produto")
+	private List <ItemPedido> itensPedidos;
 	
 	@ManyToOne
 	@JoinColumn (name = "categoriaid", referencedColumnName = "categoriaid")
 	private Categoria categoria;
 
-	public ItemPedido getItemPedido() {
-		return itemPedido;
+	public List<ItemPedido> getItensPedidos() {
+		return itensPedidos;
 	}
 
-	public void setItemPedido(ItemPedido itemPedido) {
-		this.itemPedido = itemPedido;
+	public void setItensPedidos(List<ItemPedido> itensPedidos) {
+		this.itensPedidos = itensPedidos;
 	}
 
 	public Categoria getCategoria() {
@@ -127,6 +128,5 @@ public class Produto {
 	public void setImagem(byte[] imagem) {
 		this.imagem = imagem;
 	}
-	
-	
+
 }
