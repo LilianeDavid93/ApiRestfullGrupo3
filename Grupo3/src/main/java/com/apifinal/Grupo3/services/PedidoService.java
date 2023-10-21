@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.DTO.ItemPedidoDTO;
@@ -23,9 +22,6 @@ public class PedidoService {
 	@Autowired
 	EmailService emailService;
 
-	@Autowired
-	JavaMailSender javaMailSender;
-
 	public List<Pedido> listarPedidos() {
 		return pedidoRepo.findAll();
 	}
@@ -34,39 +30,16 @@ public class PedidoService {
 		return pedidoRepo.findById(id).orElse(null);
 	}
 
+
+
 	public Pedido salvarPedido(Pedido pedido) {
 		Pedido cadastroPedido = pedidoRepo.save(pedido);
-
-		PedidoDTO pedidoDTO = PedidoRelatorioPorId(cadastroPedido.getPedidoId());
-		String relatorioHTML = HTMLRelatorio(pedidoDTO);
-		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatório de Pedido", relatorioHTML);
-
+		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido", cadastroPedido.toString());
 		return cadastroPedido;
 	}
 
-	private String HTMLRelatorio(PedidoDTO pedidoDTO) {
-		StringBuilder html = new StringBuilder();
-		html.append("<html><body>");
-		html.append("<h1>Relatório de Pedido</h1>");
-		html.append("<p>ID do Pedido: " + pedidoDTO.getPedidoId() + "</p>");
-		html.append("<p>Data do Pedido: " + pedidoDTO.getDataPedido() + "</p>");
-		html.append("<p>Valor Total: R$" + pedidoDTO.getValorTotal() + "</p");
-
-		for (ItemPedidoDTO item : pedidoDTO.getItensPedido()) {
-			html.append("<p>Produto: " + item.getNome() + "</p>");
-			html.append("<p>Preço de Venda: R$" + item.getPrecoVenda() + "</p>");
-			html.append("<p>Quantidade: " + item.getQuantidade() + "</p>");
-			html.append("<p>Valor Bruto: R$" + item.getValorBruto() + "</p>");
-			html.append("<p>Desconto: R$" + item.getValorBruto() + "</p>");
-			html.append("<p>Valor Liquido: R$" + item.getValorLiquido()+ "</p>");
-
-
-		}
-
-		html.append("</body></html>");
-		return html.toString();
-	}
-
+	
+	
 	public boolean validarDataPedido(LocalDateTime dataPedido) {
 		LocalDateTime dataAtual = LocalDateTime.now();
 		return !dataPedido.isBefore(dataAtual);
@@ -155,4 +128,5 @@ public class PedidoService {
 
 		return pedidoDTO;
 	}
+
 }
