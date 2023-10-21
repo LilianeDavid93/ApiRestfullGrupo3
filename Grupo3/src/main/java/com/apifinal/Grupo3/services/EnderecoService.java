@@ -50,16 +50,15 @@ public class EnderecoService {
 		return false;
 	}
 
-	public CepDTO consultaCep (String cep)
-	{
+	public CepDTO consultaCep(String cep) {
 		RestTemplate restTemplate = new RestTemplate();
-		String uri = "https://viacep.com.br/ws/";
-		
+		String uri = "https://viacep.com.br/ws/{cep}/json";
+
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("cep", cep);
-		
+
 		CepDTO cepDto = restTemplate.getForObject(uri, CepDTO.class, params);
-		
+
 		return cepDto;
 	}
 }
