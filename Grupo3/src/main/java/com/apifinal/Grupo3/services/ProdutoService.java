@@ -14,7 +14,7 @@ public class ProdutoService {
 	ProdutoRepository produtoRep;
 
 	public Produto buscarProdutoId(Integer produtoId) {
-		return produtoRep.getById(produtoId);
+		return produtoRep.findById(produtoId).orElse(null);
 	}
 
 	public List<Produto> listarProduto() {
