@@ -1,10 +1,14 @@
 package com.apifinal.Grupo3.services;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.apifinal.Grupo3.DTO.CepDTO;
 import com.apifinal.Grupo3.entities.Endereco;
 import com.apifinal.Grupo3.repositories.EnderecoRepository;
 
@@ -46,4 +50,16 @@ public class EnderecoService {
 		return false;
 	}
 
+	public CepDTO consultaCep (String cep)
+	{
+		RestTemplate restTemplate = new RestTemplate();
+		String uri = "https://viacep.com.br/ws/";
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("cep", cep);
+		
+		CepDTO cepDto = restTemplate.getForObject(uri, CepDTO.class, params);
+		
+		return cepDto;
+	}
 }
