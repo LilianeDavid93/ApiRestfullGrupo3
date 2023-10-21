@@ -1,5 +1,8 @@
 package com.apifinal.Grupo3.controllers;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +43,33 @@ public class PedidoController {
 		}
 	}
 
-	@PostMapping
-	public ResponseEntity<Pedido> salvarPedido(@RequestBody Pedido pedido) {
-		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
+//	@PostMapping
+//	public ResponseEntity<Pedido> salvarPedido(@RequestBody Pedido pedido) {
+//		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
+//	}
+
+	@PostMapping("/cadastro")
+	public ResponseEntity<?> salvarPedido(@RequestBody Pedido pedido) {
+	    if (pedido.getDataPedido() == null) {
+	        return ResponseEntity.badRequest().body("A data do pedido é obrigatória.");
+	    }
+
+	    if (pedido.getDataEntrega() != null && pedido.getDataEntrega().before(pedido.getDataPedido())) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body("A data de entrega não pode ser anterior à data de cadastro.");
+	    }
+
+	    Date dataPedidoDate = pedido.getDataPedido();
+	    LocalDateTime dataPedido = dataPedidoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+	    if (!pedidoService.validarDataPedido(dataPedido)) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                .body("Não é possível cadastrar um pedido com data retroativa.");
+	    }
+
+	    Pedido pedidoSalvo = pedidoService.salvarPedido(pedido);
+
+	    return new ResponseEntity<>(pedidoSalvo, HttpStatus.CREATED);
 	}
 
 	@PutMapping
@@ -52,7 +79,7 @@ public class PedidoController {
 
 	@DeleteMapping
 	public ResponseEntity<String> deletarPedido(@RequestBody Pedido pedido) {
-		if (pedidoService.deletarPedido(pedido) == true)
+		if (Boolean.TRUE.equals(pedidoService.deletarPedido(pedido)) == true)
 			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
 		else
 			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
