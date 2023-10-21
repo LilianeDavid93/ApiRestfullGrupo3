@@ -79,6 +79,11 @@ public class ItemPedidoDTO {
 		this.valorBruto = valorBruto;
 		this.valorLiquido = valorLiquido;
 		this.nome = nome;
+		
 	}
+
+	
+	
+	
 
 }

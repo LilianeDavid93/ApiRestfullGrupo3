@@ -43,10 +43,6 @@ public class PedidoController {
 		}
 	}
 
-//	@PostMapping
-//	public ResponseEntity<Pedido> salvarPedido(@RequestBody Pedido pedido) {
-//		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
-//	}
 
 	@PostMapping("/cadastro")
 	public ResponseEntity<?> salvarPedido(@RequestBody Pedido pedido) {
