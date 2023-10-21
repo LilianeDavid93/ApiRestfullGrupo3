@@ -57,6 +57,7 @@ public class EnderecoController {
 		else
 			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
 	}
+
 	@GetMapping("/consulta-cep/{cep}")
 	public ResponseEntity<CepDTO> consultaCep(@PathVariable String cep) {
 		return new ResponseEntity<>(enderecoService.consultaCep(cep), HttpStatus.OK);
