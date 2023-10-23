@@ -52,6 +52,16 @@ public class PedidoDTO {
 	public PedidoDTO() {
 	}
 
+	@Override
+	public String toString() {
+		return "PedidoDTO [pedidoId=" + pedidoId + ", dataPedido=" + dataPedido + ", valorTotal=" + valorTotal
+				+ ", itensPedido=" + itensPedido + ", getPedidoId()=" + getPedidoId() + ", getDataPedido()="
+				+ getDataPedido() + ", getValorTotal()=" + getValorTotal() + ", getItensPedido()=" + getItensPedido()
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
+	}
+
+	
 	
 	
 }
