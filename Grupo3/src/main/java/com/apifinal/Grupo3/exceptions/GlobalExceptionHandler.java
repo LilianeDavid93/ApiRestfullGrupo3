@@ -30,13 +30,53 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 	
-	/*@ExceptionHandler(AlunoNotFoundException.class)
-    ProblemDetail handleAlunoNotFoundException(AlunoNotFoundException e) {
+	@ExceptionHandler(CategoriaNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(CategoriaNotFoundException e) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
         problemDetail.setTitle("Aluno Não Encontrado");
         problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
         return problemDetail;
-    }*/
+    }
+	
+	@ExceptionHandler(ClienteNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(ClienteNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Aluno Não Encontrado");
+        problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
+        return problemDetail;
+    }
+	
+	@ExceptionHandler(EnderecoNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(EnderecoNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Aluno Não Encontrado");
+        problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
+        return problemDetail;
+    }
+	
+	@ExceptionHandler(ItemPedidoNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(ItemPedidoNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Aluno Não Encontrado");
+        problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
+        return problemDetail;
+    }
+	
+	@ExceptionHandler(PedidoNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(PedidoNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Aluno Não Encontrado");
+        problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
+        return problemDetail;
+    }
+	
+	@ExceptionHandler(ProdutoNotFoundException.class)
+    ProblemDetail handleAlunoNotFoundException(ProdutoNotFoundException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+        problemDetail.setTitle("Aluno Não Encontrado");
+        problemDetail.setType(URI.create("https://api.biblioteca.com/errors/not-found"));
+        return problemDetail;
+    }
 	
 	@Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, 

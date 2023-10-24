@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.apifinal.Grupo3.DTO.CepDTO;
 import com.apifinal.Grupo3.entities.Endereco;
+import com.apifinal.Grupo3.exceptions.EnderecoNotFoundException;
 import com.apifinal.Grupo3.repositories.EnderecoRepository;
 
 @Service
@@ -18,7 +19,8 @@ public class EnderecoService {
 	EnderecoRepository enderecoRep;
 
 	public Endereco buscarEnderecoId(Integer enderecoId) {
-		return enderecoRep.findById(enderecoId).orElse(null);
+		return enderecoRep.findById(enderecoId)
+		        .orElseThrow(() -> new EnderecoNotFoundException(enderecoId));
 	}
 
 	public List<Endereco> listarEndereco() {

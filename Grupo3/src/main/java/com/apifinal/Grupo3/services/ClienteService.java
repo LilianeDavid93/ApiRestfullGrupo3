@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.entities.Cliente;
+import com.apifinal.Grupo3.exceptions.ClienteNotFoundException;
 import com.apifinal.Grupo3.repositories.ClienteRepository;
 
 @Service
@@ -19,7 +20,8 @@ public class ClienteService {
 	}
 	
 	public Cliente buscarClienteId(Integer clienteId) {
-		return clienteRep.findById(clienteId).orElse(null);
+		return clienteRep.findById(clienteId)
+		        .orElseThrow(() -> new ClienteNotFoundException(clienteId));
 	}
 
 	public Cliente salvarCliente(Cliente cliente) {

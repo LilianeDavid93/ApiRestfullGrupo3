@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.entities.ItemPedido;
+import com.apifinal.Grupo3.exceptions.ItemPedidoNotFoundException;
 import com.apifinal.Grupo3.repositories.ItemPedidoRepository;
 
 @Service
@@ -22,7 +23,8 @@ public class ItemPedidoService {
     }
 
     public ItemPedido buscarItemPedidoId(Integer itemPedidoId) {
-        return itemPedidoRepository.findById(itemPedidoId).orElse(null);
+    	return itemPedidoRepository.findById(itemPedidoId)
+		        .orElseThrow(() -> new ItemPedidoNotFoundException(itemPedidoId));
     }
 
     public ItemPedido salvarItemPedido(ItemPedido itemPedido) {

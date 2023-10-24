@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.apifinal.Grupo3.DTO.PedidoDTO;
 import com.apifinal.Grupo3.entities.ItemPedido;
 import com.apifinal.Grupo3.services.EmailService;
 import com.apifinal.Grupo3.services.ItemPedidoService;
@@ -37,11 +36,7 @@ public class ItemPedidoController {
     @GetMapping("/{id}")
     public ResponseEntity<ItemPedido> buscarItemPedidoId(@PathVariable Integer id) {
         ItemPedido itemPedido = itemPedidoService.buscarItemPedidoId(id);
-        if (itemPedido == null) {
-            return new ResponseEntity<>(itemPedido, HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(itemPedido, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(itemPedido, HttpStatus.OK);
     }
 
     @PostMapping

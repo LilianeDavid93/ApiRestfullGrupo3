@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.apifinal.Grupo3.DTO.PedidoDTO;
-import com.apifinal.Grupo3.entities.Cliente;
-import com.apifinal.Grupo3.entities.Endereco;
 import com.apifinal.Grupo3.entities.Pedido;
 import com.apifinal.Grupo3.services.PedidoService;
 
@@ -32,13 +30,9 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PedidoDTO> buscarPedidoPorId(@PathVariable Integer id) {
-        PedidoDTO pedido = pedidoService.PedidoRelatorioPorId(id);
-        if (pedido == null) {
-            return new ResponseEntity<>(pedido, HttpStatus.NOT_FOUND);
-        } else {
-            return ResponseEntity.ok(pedido);
-        }
+    public ResponseEntity<Pedido> buscarPedidoPorId(@PathVariable Integer id) {
+        Pedido pedido = pedidoService.buscarPedidoPorId(id);
+        return new ResponseEntity<>(pedido, HttpStatus.OK);
     }
     
 	@PostMapping

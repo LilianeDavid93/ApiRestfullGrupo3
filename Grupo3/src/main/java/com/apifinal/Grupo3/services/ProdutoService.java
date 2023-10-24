@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.entities.Produto;
+import com.apifinal.Grupo3.exceptions.ProdutoNotFoundException;
 import com.apifinal.Grupo3.repositories.ProdutoRepository;
 
 @Service
@@ -14,7 +15,8 @@ public class ProdutoService {
 	ProdutoRepository produtoRep;
 
 	public Produto buscarProdutoId(Integer produtoId) {
-		return produtoRep.findById(produtoId).orElse(null);
+		return produtoRep.findById(produtoId)
+		        .orElseThrow(() -> new ProdutoNotFoundException(produtoId));
 	}
 
 	public List<Produto> listarProduto() {

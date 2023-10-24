@@ -33,11 +33,7 @@ public class EnderecoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Endereco> buscarEnderecoId(@PathVariable Integer id) {
 		Endereco endereco = enderecoService.buscarEnderecoId(id);
-		if (endereco == null) {
-			return new ResponseEntity<>(endereco, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(endereco, HttpStatus.OK);
-		}
+		return new ResponseEntity<>(endereco, HttpStatus.OK);
 	}
 
 	@PostMapping

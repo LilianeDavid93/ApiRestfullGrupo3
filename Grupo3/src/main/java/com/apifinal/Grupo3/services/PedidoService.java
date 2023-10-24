@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.DTO.ItemPedidoDTO;
 import com.apifinal.Grupo3.DTO.PedidoDTO;
-import com.apifinal.Grupo3.entities.Cliente;
 import com.apifinal.Grupo3.entities.ItemPedido;
 import com.apifinal.Grupo3.entities.Pedido;
+import com.apifinal.Grupo3.exceptions.PedidoNotFoundException;
 import com.apifinal.Grupo3.repositories.PedidoRepository;
 
 @Service
@@ -27,8 +27,9 @@ public class PedidoService {
         return pedidoRepo.findAll();
     }
 
-    public Pedido buscarPedidoPorId(Integer id) {
-        return pedidoRepo.findById(id).orElse(null);
+    public Pedido buscarPedidoPorId(Integer pedidoId) {
+    	return pedidoRepo.findById(pedidoId)
+		        .orElseThrow(() -> new PedidoNotFoundException(pedidoId));
     }
 
     public List<PedidoDTO> listarPedidosComItens() {
