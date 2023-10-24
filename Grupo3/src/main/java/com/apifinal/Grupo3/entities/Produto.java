@@ -46,7 +46,6 @@ public class Produto {
 	@Column(name = "valorunitario")
 	private Double valorUnitario;
 	
-	@Lob
 	@Column(name = "imagem")
 	private byte[] imagem;
 
