@@ -1,5 +1,6 @@
 package com.apifinal.Grupo3.services;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -81,6 +82,11 @@ public class PedidoService {
         }
         return false;
     }
+    
+	public boolean validarDataPedido(LocalDateTime dataPedido) {
+		LocalDateTime dataAtual = LocalDateTime.now();
+		return !dataPedido.isBefore(dataAtual);
+	}
     
 	public double calcularValorTotalPedido(List<ItemPedido> itensPedido) {
 	    double valorTotal = 0.0;
