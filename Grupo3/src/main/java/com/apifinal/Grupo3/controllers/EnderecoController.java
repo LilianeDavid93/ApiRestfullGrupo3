@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apifinal.Grupo3.DTO.CepDTO;
 import com.apifinal.Grupo3.entities.Endereco;
 import com.apifinal.Grupo3.services.EnderecoService;
 
@@ -32,11 +33,7 @@ public class EnderecoController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Endereco> buscarEnderecoId(@PathVariable Integer id) {
 		Endereco endereco = enderecoService.buscarEnderecoId(id);
-		if (endereco == null) {
-			return new ResponseEntity<>(endereco, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(endereco, HttpStatus.OK);
-		}
+		return new ResponseEntity<>(endereco, HttpStatus.OK);
 	}
 
 	@PostMapping
@@ -55,5 +52,10 @@ public class EnderecoController {
 			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
 		else
 			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/consulta-cep/{cep}")
+	public ResponseEntity<CepDTO> consultaCep(@PathVariable String cep) {
+		return new ResponseEntity<>(enderecoService.consultaCep(cep), HttpStatus.OK);
 	}
 }

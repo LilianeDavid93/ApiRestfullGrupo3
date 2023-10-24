@@ -1,5 +1,8 @@
 package com.apifinal.Grupo3.controllers;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,26 +26,23 @@ import com.apifinal.Grupo3.services.PedidoService;
 public class PedidoController {
 
 	@Autowired
-	PedidoService pedidoService;
+	private PedidoService pedidoService;
 
 	@GetMapping
 	public ResponseEntity<List<Pedido>> listarPedidos() {
-		return new ResponseEntity<>(pedidoService.listarPedidos(), HttpStatus.OK);
+		List<Pedido> pedidos = pedidoService.listarPedidos();
+
+		if (pedidos.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+
+		return ResponseEntity.ok(pedidos);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Pedido> buscarPedidoId(@PathVariable Integer id) {
+	public ResponseEntity<Pedido> buscarPedidoPorId(@PathVariable Integer id) {
 		Pedido pedido = pedidoService.buscarPedidoPorId(id);
-		if (pedido == null) {
-			return new ResponseEntity<>(pedido, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(pedido, HttpStatus.OK);
-		}
-	}
-
-	@PostMapping
-	public ResponseEntity<Pedido> salvarPedido(@RequestBody Pedido pedido) {
-		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
+		return new ResponseEntity<>(pedido, HttpStatus.OK);
 	}
 
 	@PutMapping
@@ -52,30 +52,50 @@ public class PedidoController {
 
 	@DeleteMapping
 	public ResponseEntity<String> deletarPedido(@RequestBody Pedido pedido) {
-		if (pedidoService.deletarPedido(pedido) == true)
+		if (pedidoService.deletarPedido(pedido))
 			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
 		else
 			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
 	}
 
-	@GetMapping("/relatorio")
-	public ResponseEntity<List<PedidoDTO>> gerarRelatorioDePedidos() {
-		List<PedidoDTO> relatorio = pedidoService.listarPedidosComItens();
+	@GetMapping("/DTO")
+	public ResponseEntity<List<PedidoDTO>> listarPedidosDTO() {
+		List<PedidoDTO> pedidos = pedidoService.listarPedidosComItens();
 
-		if (relatorio.isEmpty()) {
+		if (pedidos.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
 
-		return ResponseEntity.ok(relatorio);
+		return ResponseEntity.ok(pedidos);
 	}
 
-	@GetMapping("/relatorio/{id}")
-	public ResponseEntity<PedidoDTO> RelatorioPedido(@PathVariable Integer id) {
-		PedidoDTO pedidoDTO = pedidoService.PedidoRelatorioPorId(id);
-		if (pedidoDTO == null) {
-			return new ResponseEntity<>(pedidoDTO, HttpStatus.NOT_FOUND);
-		} else {
-			return new ResponseEntity<>(pedidoDTO, HttpStatus.OK);
+	@PostMapping
+	public ResponseEntity<String> salvarPedido(@RequestBody PedidoDTO pedidoDTO) {
+		Pedido pedido = pedidoService.convertToEntity(pedidoDTO);
+
+		if (pedido == null) {
+			return ResponseEntity.badRequest().build();
 		}
+
+		if (pedido.getDataPedido() == null) {
+			return ResponseEntity.badRequest().body("A data do pedido é obrigatória.");
+		}
+
+		if (pedido.getDataEntrega() != null && pedido.getDataEntrega().before(pedido.getDataPedido())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("A data de entrega não pode ser anterior à data de cadastro.");
+		}
+		Date dataPedidoDate = pedido.getDataPedido();
+		LocalDateTime dataPedido = dataPedidoDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+		if (!pedidoService.validarDataPedido(dataPedido)) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Não é possível cadastrar um pedido com data retroativa.");
+		}
+		Pedido pedidoSalvo = pedidoService.salvarPedido(pedido);
+
+		PedidoDTO pedidoSalvoDTO = pedidoService.convertToDTO(pedidoSalvo);
+
+		return ResponseEntity.status(HttpStatus.CREATED).body("Pedido realizado com sucesso");
 	}
 }

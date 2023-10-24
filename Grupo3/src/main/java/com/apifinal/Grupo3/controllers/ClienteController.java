@@ -32,11 +32,8 @@ public class ClienteController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Cliente> buscarClientePorId(@PathVariable Integer id) {
 		Cliente cliente = clienteService.buscarClienteId(id);
-		
-		if(cliente == null) {
-			return new ResponseEntity<>(cliente, HttpStatus.NOT_FOUND);
-		}else
-			return new ResponseEntity<>(cliente, HttpStatus.OK);
+		return new ResponseEntity<>(cliente, HttpStatus.OK);
+
 	}
 	
 	@PostMapping

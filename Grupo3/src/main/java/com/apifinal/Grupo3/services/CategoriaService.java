@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.entities.Categoria;
+import com.apifinal.Grupo3.exceptions.CategoriaNotFoundException;
 import com.apifinal.Grupo3.repositories.CategoriaRepository;
 
 @Service
@@ -15,7 +16,8 @@ public class CategoriaService {
 	CategoriaRepository categoriaRep;
 
 	public Categoria buscarCategoriaId(Integer categoriaId) {
-		return categoriaRep.findById(categoriaId).orElse(null);
+		return categoriaRep.findById(categoriaId)
+		        .orElseThrow(() -> new CategoriaNotFoundException(categoriaId));
 	}
 
 	public List<Categoria> listarCategorias() {
@@ -40,10 +42,6 @@ public class CategoriaService {
 
 		categoriaRep.delete(categoria);
 
-		Categoria categoriaContinuaExistindo = buscarCategoriaId(categoria.getCategoriaId());
-		if (categoriaContinuaExistindo == null)
-			return true;
-
-		return false;
+		return true;
 	}
 }
