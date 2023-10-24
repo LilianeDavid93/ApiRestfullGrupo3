@@ -34,11 +34,7 @@ public class PedidoController {
         Pedido pedido = pedidoService.buscarPedidoPorId(id);
         return new ResponseEntity<>(pedido, HttpStatus.OK);
     }
-    
-	@PostMapping
-	public ResponseEntity<Pedido> salvar(@RequestBody Pedido pedido) {
-		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
-	}
+   
 	
 	@PutMapping
 	public ResponseEntity<Pedido> atualizar(@RequestBody Pedido pedido) {
@@ -64,19 +60,7 @@ public class PedidoController {
 		return ResponseEntity.ok(pedidos);
 	}
 
-	@PostMapping("/calculo")
-	public ResponseEntity<Pedido> calcularPedido(@RequestBody Pedido pedido) {
-	    pedidoService.calcularValoresItensPedido(pedido.getItensPedidos());
-
-	    double valorTotal = pedidoService.calcularValorTotalPedido(pedido.getItensPedidos());
-	    pedido.setValorTotal(valorTotal);
-
-	    Pedido novoPedido = pedidoService.salvarPedido(pedido);
-
-	    return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
-	}
-	
-    @PostMapping("/DTO")
+    @PostMapping
     public ResponseEntity<PedidoDTO> salvarPedido(@RequestBody PedidoDTO pedidoDTO) {
         Pedido pedido = pedidoService.convertToEntity(pedidoDTO);
 

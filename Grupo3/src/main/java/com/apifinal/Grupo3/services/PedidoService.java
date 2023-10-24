@@ -1,7 +1,7 @@
 package com.apifinal.Grupo3.services;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,32 +44,20 @@ public class PedidoService {
         return pedidosDTO;
     }
 
-    public PedidoDTO PedidoRelatorioPorId(Integer pedidoId) {
-        Pedido pedido = buscarPedidoPorId(pedidoId);
+    public Pedido salvarPedido(Pedido pedido) {
+    	Date dataAtual = new Date(-1);
+    	Pedido cadastroPedido = pedidoRepo.save(pedido);
+		
+    	if(pedido.getDataPedido() != null && pedido.getDataPedido().before(dataAtual)) {
+			throw new IllegalArgumentException("A data do pedido não pode ser retroativa.");
+		}
 
-        if (pedido == null) {
-            throw new IllegalArgumentException("ID de pedido não encontrado: " + pedidoId);
-        }
-
-        return convertToDTO(pedido);
-    }
-    
-	public Pedido salvarPedido(Pedido pedido) {
-		return pedidoRepo.save(pedido);
-	}
-
-    public Pedido salvarPedidoRelatorio(Pedido pedido) {
-
-        Pedido cadastroPedido = pedidoRepo.save(pedido);
         String relatorio = criarRelatorio(cadastroPedido);
         emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido",  relatorio);
         return cadastroPedido;
     }
 
-    public boolean validarDataPedido(LocalDateTime dataPedido) {
-        LocalDateTime dataAtual = LocalDateTime.now();
-        return !dataPedido.isBefore(dataAtual);
-    }
+   
 
     public Pedido atualizarPedido(Pedido pedido) {
         return pedidoRepo.save(pedido);
@@ -93,18 +81,7 @@ public class PedidoService {
         }
         return false;
     }
-
-    public void calcularValoresItensPedido(List<ItemPedido> itensPedido) {
-        for (ItemPedido item : itensPedido) {
-            double valorBruto = item.getPrecoVenda() * item.getQuantidade();
-            double valorDesconto = valorBruto - (item.getPercentualDesconto() / 100.0);
-            double valorLiquido = valorBruto - valorDesconto;
-
-            item.setValorBruto(valorBruto);
-            item.setValorLiquido(valorLiquido);
-        }
-    }
-	
+    
 	public double calcularValorTotalPedido(List<ItemPedido> itensPedido) {
 	    double valorTotal = 0.0;
 	    for (ItemPedido item : itensPedido) {
@@ -159,9 +136,9 @@ public class PedidoService {
         List<ItemPedidoDTO> itensDTO = new ArrayList<>();
         for (ItemPedido itemPedido : pedido.getItensPedidos()) {
             ItemPedidoDTO itemPedidoDTO = new ItemPedidoDTO();
-            itemPedidoDTO.setItemPedidoId(itemPedido.getProduto().getProdutoId());
-            itemPedidoDTO.setNome(itemPedido.getProduto().getNome());
-           	itemPedidoDTO.setPrecoVenda(itemPedido.getProduto().getValorUnitario());
+            itemPedidoDTO.setItemPedidoId(itemPedido.getItemPedidoId());
+        //    itemPedidoDTO.setNome(itemPedido.getProduto().getNome());
+           //	itemPedidoDTO.setPrecoVenda(itemPedido.getProduto().getValorUnitario());
             itemPedidoDTO.setQuantidade(itemPedido.getQuantidade());
             itemPedidoDTO.setValorBruto(itemPedido.getValorBruto());
             itemPedidoDTO.setPercentualDesconto(itemPedido.getPercentualDesconto());
@@ -174,6 +151,7 @@ public class PedidoService {
         return pedidoDTO;
     }
     
+    
     private String criarRelatorio(Pedido pedido) {
         StringBuilder relatorio = new StringBuilder();
         relatorio.append("Relatório de Pedido\n\n");
@@ -183,7 +161,7 @@ public class PedidoService {
         relatorio.append("Itens do Pedido:\n");
 
         for (ItemPedido item : pedido.getItensPedidos()) {
-            //relatorio.append("Nome do Produto: " + item.getProduto().getNome() + "\n");
+            relatorio.append("Nome do Produto: " + item.getItemPedidoId() + "\n");
             relatorio.append("Preço de Venda: " + item.getPrecoVenda() + "\n");
             relatorio.append("Quantidade: " + item.getQuantidade() + "\n");
             relatorio.append("Valor Bruto: " + item.getValorBruto() + "\n");
