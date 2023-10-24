@@ -47,14 +47,11 @@ public class ItemPedidoController {
     @PostMapping
     public ResponseEntity<ItemPedido> salvar(@RequestBody ItemPedido itemPedido) {
         ItemPedido itemPedidoSalvo = itemPedidoService.salvarItemPedido(itemPedido);
-        
-     
+
 		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido", itemPedido.toString());
-       
-        
+
         return new ResponseEntity<>(itemPedidoSalvo, HttpStatus.CREATED);
     }
-//    
   
 //    @PostMapping
 //    public ResponseEntity<ItemPedido> salvarEEnviarRelatorio(@RequestBody ItemPedido itemPedido) {

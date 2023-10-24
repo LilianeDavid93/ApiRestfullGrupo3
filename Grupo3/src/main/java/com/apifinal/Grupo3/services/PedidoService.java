@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.apifinal.Grupo3.DTO.ItemPedidoDTO;
 import com.apifinal.Grupo3.DTO.PedidoDTO;
+import com.apifinal.Grupo3.entities.Cliente;
 import com.apifinal.Grupo3.entities.ItemPedido;
 import com.apifinal.Grupo3.entities.Pedido;
 import com.apifinal.Grupo3.repositories.PedidoRepository;
@@ -51,8 +52,12 @@ public class PedidoService {
 
         return convertToDTO(pedido);
     }
+    
+	public Pedido salvarPedido(Pedido pedido) {
+		return pedidoRepo.save(pedido);
+	}
 
-    public Pedido salvarPedido(Pedido pedido) {
+    public Pedido salvarPedidoRelatorio(Pedido pedido) {
 
         Pedido cadastroPedido = pedidoRepo.save(pedido);
         String relatorio = criarRelatorio(cadastroPedido);
@@ -87,6 +92,25 @@ public class PedidoService {
         }
         return false;
     }
+
+    public void calcularValoresItensPedido(List<ItemPedido> itensPedido) {
+        for (ItemPedido item : itensPedido) {
+            double valorBruto = item.getPrecoVenda() * item.getQuantidade();
+            double valorDesconto = valorBruto - (item.getPercentualDesconto() / 100.0);
+            double valorLiquido = valorBruto - valorDesconto;
+
+            item.setValorBruto(valorBruto);
+            item.setValorLiquido(valorLiquido);
+        }
+    }
+	
+	public double calcularValorTotalPedido(List<ItemPedido> itensPedido) {
+	    double valorTotal = 0.0;
+	    for (ItemPedido item : itensPedido) {
+	        valorTotal += item.getValorLiquido();
+	    }
+	    return valorTotal;
+	}
 
     
     public Pedido convertToEntity(PedidoDTO pedidoDTO) {

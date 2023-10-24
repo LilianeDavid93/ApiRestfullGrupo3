@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.apifinal.Grupo3.DTO.PedidoDTO;
+import com.apifinal.Grupo3.entities.Cliente;
+import com.apifinal.Grupo3.entities.Endereco;
 import com.apifinal.Grupo3.entities.Pedido;
 import com.apifinal.Grupo3.services.PedidoService;
 
@@ -19,8 +21,8 @@ public class PedidoController {
     private PedidoService pedidoService;
 
     @GetMapping
-    public ResponseEntity<List<PedidoDTO>> listarPedidos() {
-        List<PedidoDTO> pedidos = pedidoService.listarPedidosComItens();
+    public ResponseEntity<List<Pedido>> listarPedidos() {
+        List<Pedido> pedidos = pedidoService.listarPedidos();
 
         if (pedidos.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -38,8 +40,49 @@ public class PedidoController {
             return ResponseEntity.ok(pedido);
         }
     }
+    
+	@PostMapping
+	public ResponseEntity<Pedido> salvar(@RequestBody Pedido pedido) {
+		return new ResponseEntity<>(pedidoService.salvarPedido(pedido), HttpStatus.CREATED);
+	}
+	
+	@PutMapping
+	public ResponseEntity<Pedido> atualizar(@RequestBody Pedido pedido) {
+		return new ResponseEntity<>(pedidoService.atualizarPedido(pedido), HttpStatus.OK);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<String> deletarPedido(@RequestBody Pedido pedido) {
+		if (pedidoService.deletarPedido(pedido))
+			return new ResponseEntity<>("Deletado com sucesso", HttpStatus.OK);
+		else
+			return new ResponseEntity<>("Nao foi possivel deletar", HttpStatus.BAD_REQUEST);
+	}
+	
+	@GetMapping("/DTO")
+	public ResponseEntity<List<PedidoDTO>> listarPedidosDTO() {
+		List<PedidoDTO> pedidos = pedidoService.listarPedidosComItens();
+		
+		if (pedidos.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		
+		return ResponseEntity.ok(pedidos);
+	}
 
-    @PostMapping
+	@PostMapping("/calculo")
+	public ResponseEntity<Pedido> calcularPedido(@RequestBody Pedido pedido) {
+	    pedidoService.calcularValoresItensPedido(pedido.getItensPedidos());
+
+	    double valorTotal = pedidoService.calcularValorTotalPedido(pedido.getItensPedidos());
+	    pedido.setValorTotal(valorTotal);
+
+	    Pedido novoPedido = pedidoService.salvarPedido(pedido);
+
+	    return new ResponseEntity<>(novoPedido, HttpStatus.CREATED);
+	}
+	
+    @PostMapping("/DTO")
     public ResponseEntity<PedidoDTO> salvarPedido(@RequestBody PedidoDTO pedidoDTO) {
         Pedido pedido = pedidoService.convertToEntity(pedidoDTO);
 
