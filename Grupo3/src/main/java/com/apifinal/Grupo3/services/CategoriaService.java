@@ -42,10 +42,6 @@ public class CategoriaService {
 
 		categoriaRep.delete(categoria);
 
-		Categoria categoriaContinuaExistindo = buscarCategoriaId(categoria.getCategoriaId());
-		if (categoriaContinuaExistindo == null)
-			return true;
-
-		return false;
+		return true;
 	}
 }
