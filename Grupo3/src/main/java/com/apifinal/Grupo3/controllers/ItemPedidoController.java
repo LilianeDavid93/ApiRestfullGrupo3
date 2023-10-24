@@ -43,42 +43,36 @@ public class ItemPedidoController {
             return new ResponseEntity<>(itemPedido, HttpStatus.OK);
         }
     }
-//
-//    @PostMapping
-//    public ResponseEntity<ItemPedido> salvar(@RequestBody ItemPedido itemPedido) {
-//        ItemPedido itemPedidoSalvo = itemPedidoService.salvarItemPedido(itemPedido);
-//        
-//     
-//		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido", itemPedido.toString());
-//       
-//        
-//        return new ResponseEntity<>(itemPedidoSalvo, HttpStatus.CREATED);
-//    }
-//    
-  
+
     @PostMapping
-    public ResponseEntity<ItemPedido> salvarEEnviarRelatorio(@RequestBody ItemPedido itemPedido) {
-     
-     
-
+    public ResponseEntity<ItemPedido> salvar(@RequestBody ItemPedido itemPedido) {
         ItemPedido itemPedidoSalvo = itemPedidoService.salvarItemPedido(itemPedido);
-
-        PedidoDTO relatorio = itemPedidoService.construirRelatorio(itemPedidoSalvo);
-
-        String relatorioTexto = itemPedidoService.construirRelatorioTexto(relatorio);
-
-      
-         emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatório de Pedido", relatorioTexto);
-
+        
+     
+		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido", itemPedido.toString());
        
+        
         return new ResponseEntity<>(itemPedidoSalvo, HttpStatus.CREATED);
     }
-
+//    
   
-
-
-
-
+//    @PostMapping
+//    public ResponseEntity<ItemPedido> salvarEEnviarRelatorio(@RequestBody ItemPedido itemPedido) {
+//     
+//     
+//
+//        ItemPedido itemPedidoSalvo = itemPedidoService.salvarItemPedido(itemPedido);
+//
+//        PedidoDTO relatorio = itemPedidoService.construirRelatorio(itemPedidoSalvo);
+//
+//        String relatorioTexto = itemPedidoService.construirRelatorioTexto(relatorio);
+//
+//      
+//         emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatório de Pedido", relatorioTexto);
+//
+//       
+//        return new ResponseEntity<>(itemPedidoSalvo, HttpStatus.CREATED);
+//    }
 
  
     @PutMapping

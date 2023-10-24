@@ -16,117 +16,157 @@ import com.apifinal.Grupo3.repositories.PedidoRepository;
 @Service
 public class PedidoService {
 
-	@Autowired
-	PedidoRepository pedidoRepo;
+    @Autowired
+    PedidoRepository pedidoRepo;
 
-	@Autowired
-	EmailService emailService;
+    @Autowired
+    EmailService emailService;
 
-	public List<Pedido> listarPedidos() {
-		return pedidoRepo.findAll();
-	}
+    public List<Pedido> listarPedidos() {
+        return pedidoRepo.findAll();
+    }
 
-	public Pedido buscarPedidoPorId(Integer id) {
-		return pedidoRepo.findById(id).orElse(null);
-	}
+    public Pedido buscarPedidoPorId(Integer id) {
+        return pedidoRepo.findById(id).orElse(null);
+    }
 
+    public List<PedidoDTO> listarPedidosComItens() {
+        List<Pedido> pedidos = pedidoRepo.findAll();
+        List<PedidoDTO> pedidosDTO = new ArrayList<>();
 
+        for (Pedido pedido : pedidos) {
+            PedidoDTO pedidoDTO = convertToDTO(pedido);
+            pedidosDTO.add(pedidoDTO);
+        }
 
-	public Pedido salvarPedido(Pedido pedido) {
-		Pedido cadastroPedido = pedidoRepo.save(pedido);
-		emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido", cadastroPedido.toString());
-		return cadastroPedido;
-	}
+        return pedidosDTO;
+    }
 
-	
-	
-	public boolean validarDataPedido(LocalDateTime dataPedido) {
-		LocalDateTime dataAtual = LocalDateTime.now();
-		return !dataPedido.isBefore(dataAtual);
-	}
+    public PedidoDTO PedidoRelatorioPorId(Integer pedidoId) {
+        Pedido pedido = buscarPedidoPorId(pedidoId);
 
-	public Pedido atualizarPedido(Pedido pedido) {
-		return pedidoRepo.save(pedido);
-	}
+        if (pedido == null) {
+            throw new IllegalArgumentException("ID de pedido não encontrado: " + pedidoId);
+        }
 
-	public Boolean deletarPedido(Pedido pedido) {
-		if (pedido == null) {
-			return false;
-		}
-		Pedido pedidoExistente = buscarPedidoPorId(pedido.getPedidoId());
+        return convertToDTO(pedido);
+    }
 
-		if (pedidoExistente == null) {
-			return false;
-		}
-		pedidoRepo.delete(pedido);
+    public Pedido salvarPedido(Pedido pedido) {
 
-		Pedido pedidoContinuaExistindo = buscarPedidoPorId(pedido.getPedidoId());
+        Pedido cadastroPedido = pedidoRepo.save(pedido);
+        String relatorio = criarRelatorio(cadastroPedido);
+        emailService.enviarEmail("apiEcommercebr@gmail.com", "Relatorio Cadastro de Pedido",  relatorio);
+        return cadastroPedido;
+    }
 
-		if (pedidoContinuaExistindo == null) {
-			return true;
-		}
-		return false;
+    public boolean validarDataPedido(LocalDateTime dataPedido) {
+        LocalDateTime dataAtual = LocalDateTime.now();
+        return !dataPedido.isBefore(dataAtual);
+    }
 
-	}
+    public Pedido atualizarPedido(Pedido pedido) {
+        return pedidoRepo.save(pedido);
+    }
 
-	public List<PedidoDTO> listarPedidosComItens() {
-		List<Pedido> pedidos = pedidoRepo.findAll();
-		List<PedidoDTO> pedidosDTO = new ArrayList<>();
+    public Boolean deletarPedido(Pedido pedido) {
+        if (pedido == null) {
+            return false;
+        }
+        Pedido pedidoExistente = buscarPedidoPorId(pedido.getPedidoId());
 
-		for (Pedido pedido : pedidos) {
-			PedidoDTO pedidoDTO = new PedidoDTO();
-			pedidoDTO.setPedidoId(pedido.getPedidoId());
-			pedidoDTO.setDataPedido(pedido.getDataPedido());
-			pedidoDTO.setValorTotal(pedido.getValorTotal());
+        if (pedidoExistente == null) {
+            return false;
+        }
+        pedidoRepo.delete(pedido);
 
-			List<ItemPedidoDTO> itensDTO = new ArrayList<>();
-			for (ItemPedido itemPedido : pedido.getItensPedidos()) {
-				ItemPedidoDTO itemPedidoDTO = new ItemPedidoDTO();
-				itemPedidoDTO.setItemPedidoId(itemPedido.getProduto().getProdutoId());
-				itemPedidoDTO.setNome(itemPedido.getProduto().getNome());
-				itemPedidoDTO.setPrecoVenda(itemPedido.getProduto().getValorUnitario());
-				itemPedidoDTO.setQuantidade(itemPedido.getQuantidade());
-				itemPedidoDTO.setValorBruto(itemPedido.getValorBruto());
-				itemPedidoDTO.setPercentualDesconto(itemPedido.getPercentualDesconto());
-				itemPedidoDTO.setValorLiquido(itemPedido.getValorLiquido());
-				itensDTO.add(itemPedidoDTO);
-			}
+        Pedido pedidoContinuaExistindo = buscarPedidoPorId(pedido.getPedidoId());
 
-			pedidoDTO.setItensPedido(itensDTO);
-			pedidosDTO.add(pedidoDTO);
-		}
+        if (pedidoContinuaExistindo == null) {
+            return true;
+        }
+        return false;
+    }
 
-		return pedidosDTO;
-	}
+    
+    public Pedido convertToEntity(PedidoDTO pedidoDTO) {
+        if (pedidoDTO == null) {
+            return null; 
+        }
 
-	public PedidoDTO PedidoRelatorioPorId(Integer pedidoId) {
-		Pedido pedido = pedidoRepo.findById(pedidoId).orElse(null);
+        Pedido pedido = new Pedido();
+        pedido.setPedidoId(pedidoDTO.getPedidoId());
+        pedido.setDataPedido(pedidoDTO.getDataPedido());
 
-		if (pedido == null) {
-			throw new IllegalArgumentException("ID de pedido não encontrado: " + pedidoId);
-		}
+        List<ItemPedido> itens = new ArrayList<>();
+        double valorTotal = 0.0;
 
-		PedidoDTO pedidoDTO = new PedidoDTO();
-		pedidoDTO.setPedidoId(pedido.getPedidoId());
-		pedidoDTO.setDataPedido(pedido.getDataPedido());
-		pedidoDTO.setValorTotal(pedido.getValorTotal());
+        for (ItemPedidoDTO itemDTO : pedidoDTO.getItensPedido()) {
+            ItemPedido item = new ItemPedido();
+            item.setQuantidade(itemDTO.getQuantidade());
 
-		List<ItemPedidoDTO> itensDTO = new ArrayList<>();
-		for (ItemPedido itemPedido : pedido.getItensPedidos()) {
-			ItemPedidoDTO itemPedidoDTO = new ItemPedidoDTO();
-			itemPedidoDTO.setItemPedidoId(itemPedido.getProduto().getProdutoId());
-			itemPedidoDTO.setNome(itemPedido.getProduto().getNome());
-			itemPedidoDTO.setPrecoVenda(itemPedido.getProduto().getValorUnitario());
-			itemPedidoDTO.setQuantidade(itemPedido.getQuantidade());
-			itemPedidoDTO.setValorBruto(itemPedido.getValorBruto());
-			itemPedidoDTO.setPercentualDesconto(itemPedido.getPercentualDesconto());
-			itemPedidoDTO.setValorLiquido(itemPedido.getValorLiquido());
-			itensDTO.add(itemPedidoDTO);
-		}
+            double precoVenda = itemDTO.getPrecoVenda();
+            double percentualDesconto = itemDTO.getPercentualDesconto();
+            double valorBruto = precoVenda * item.getQuantidade();
+            double valorLiquido = valorBruto - (valorBruto * (percentualDesconto / 100));
 
-		pedidoDTO.setItensPedido(itensDTO);
+            item.setValorBruto(valorBruto);
+            item.setValorLiquido(valorLiquido);
+            item.setPercentualDesconto(percentualDesconto);
 
-		return pedidoDTO;
-	}
+           
+            itens.add(item);
+            valorTotal += valorLiquido;
+        }
 
+        pedido.setItensPedidos(itens);
+        pedido.setValorTotal(valorTotal);
+
+        return pedido;
+    }
+
+    public PedidoDTO convertToDTO(Pedido pedido) {
+        PedidoDTO pedidoDTO = new PedidoDTO();
+        pedidoDTO.setPedidoId(pedido.getPedidoId());
+        pedidoDTO.setDataPedido(pedido.getDataPedido());
+        pedidoDTO.setValorTotal(pedido.getValorTotal());
+
+        List<ItemPedidoDTO> itensDTO = new ArrayList<>();
+        for (ItemPedido itemPedido : pedido.getItensPedidos()) {
+            ItemPedidoDTO itemPedidoDTO = new ItemPedidoDTO();
+            itemPedidoDTO.setItemPedidoId(itemPedido.getProduto().getProdutoId());
+            itemPedidoDTO.setNome(itemPedido.getProduto().getNome());
+           	itemPedidoDTO.setPrecoVenda(itemPedido.getProduto().getValorUnitario());
+            itemPedidoDTO.setQuantidade(itemPedido.getQuantidade());
+            itemPedidoDTO.setValorBruto(itemPedido.getValorBruto());
+            itemPedidoDTO.setPercentualDesconto(itemPedido.getPercentualDesconto());
+            itemPedidoDTO.setValorLiquido(itemPedido.getValorLiquido());
+            itensDTO.add(itemPedidoDTO);
+        }
+
+        pedidoDTO.setItensPedido(itensDTO);
+
+        return pedidoDTO;
+    }
+    
+    private String criarRelatorio(Pedido pedido) {
+        StringBuilder relatorio = new StringBuilder();
+        relatorio.append("Relatório de Pedido\n\n");
+        relatorio.append("ID do Pedido: " + pedido.getPedidoId() + "\n");
+        relatorio.append("Data do Pedido: " + pedido.getDataPedido() + "\n");
+        relatorio.append("Valor Total: " + pedido.getValorTotal() + "\n\n");
+        relatorio.append("Itens do Pedido:\n");
+
+        for (ItemPedido item : pedido.getItensPedidos()) {
+            //relatorio.append("Nome do Produto: " + item.getProduto().getNome() + "\n");
+            relatorio.append("Preço de Venda: " + item.getPrecoVenda() + "\n");
+            relatorio.append("Quantidade: " + item.getQuantidade() + "\n");
+            relatorio.append("Valor Bruto: " + item.getValorBruto() + "\n");
+            relatorio.append("Percentual de Desconto: " + item.getPercentualDesconto() + "\n");
+            relatorio.append("Valor Líquido: " + item.getValorLiquido() + "\n\n");
+        }
+
+        return relatorio.toString();
+    }
+    
 }

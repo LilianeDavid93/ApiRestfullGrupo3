@@ -71,7 +71,6 @@ public class ItemPedidoDTO {
 
 	public ItemPedidoDTO(Integer itemPedidoId, Integer quantidade, Double precoVenda, Double percentualDesconto,
 			Double valorBruto, Double valorLiquido, String nome) {
-		super();
 		this.itemPedidoId = itemPedidoId;
 		this.quantidade = quantidade;
 		this.precoVenda = precoVenda;

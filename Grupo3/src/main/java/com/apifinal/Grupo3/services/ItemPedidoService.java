@@ -78,17 +78,34 @@ public class ItemPedidoService {
         
         return relatorioTexto.toString();
     }
+   
     public PedidoDTO construirRelatorio(ItemPedido itemPedido) {
         PedidoDTO relatorio = new PedidoDTO();
         relatorio.setPedidoId(itemPedido.getItemPedidoId()); 
         return relatorio;
     }
 
+  
     public String construirRelatorioTexto(PedidoDTO relatorio) {
         StringBuilder relatorioTexto = new StringBuilder();
+
         relatorioTexto.append("Número do Pedido: ").append(relatorio.getPedidoId()).append("\n");
         relatorioTexto.append("Data do Pedido: ").append(relatorio.getDataPedido()).append("\n");
-       
+        relatorioTexto.append("Valor Total: ").append(relatorio.getValorTotal()).append("\n");
+
+        List<ItemPedidoDTO> itensPedido = relatorio.getItensPedido();
+        for (ItemPedidoDTO itemPedidoDTO : itensPedido) {
+            relatorioTexto.append("  - Item: ").append(itemPedidoDTO.getNome()).append("\n");
+            relatorioTexto.append("    Preço de Venda: ").append(itemPedidoDTO.getPrecoVenda()).append("\n");
+            relatorioTexto.append("    Quantidade: ").append(itemPedidoDTO.getQuantidade()).append("\n");
+            relatorioTexto.append("    Valor Bruto: ").append(itemPedidoDTO.getValorBruto()).append("\n");
+            relatorioTexto.append("    Percentual de Desconto: ").append(itemPedidoDTO.getPercentualDesconto()).append("\n");
+            relatorioTexto.append("    Valor Líquido: ").append(itemPedidoDTO.getValorLiquido()).append("\n");
+        }
+
+      
+        relatorioTexto.append("\n");
+
         return relatorioTexto.toString();
     }
 
